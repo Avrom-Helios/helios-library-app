@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Copy of Book</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Copies of Books</value>
+    </caseValues>
+    <fields>
+        <label><!-- Book --></label>
+        <name>Book__c</name>
+        <relationshipLabel><!-- Copies of Books --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- ID# --></label>
+        <name>Copy_Number__c</name>
+    </fields>
+    <fields>
+        <help><!-- You can leave this field blank if there is no identified donor. --></help>
+        <label><!-- Donated By --></label>
+        <name>Donated_By__c</name>
+    </fields>
+    <fields>
+        <label><!-- Is Checked Out --></label>
+        <name>Is_Checked_Out__c</name>
+    </fields>
+    <fields>
+        <label><!-- Library_long --></label>
+        <name>Library_long__c</name>
+    </fields>
+    <fields>
+        <label><!-- Library_short --></label>
+        <name>Library_short__c</name>
+    </fields>
+    <fields>
+        <help><!-- The permanet status of this book copy. --></help>
+        <label><!-- Deletion Reason --></label>
+        <name>Permanent_Status__c</name>
+        <picklistValues>
+            <masterLabel>Destroyed</masterLabel>
+            <translation><!-- Destroyed --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Erroneous Entry</masterLabel>
+            <translation><!-- Erroneous Entry --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Missing</masterLabel>
+            <translation><!-- Missing --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Removed from Collection</masterLabel>
+            <translation><!-- Removed from Collection --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Reported Lost</masterLabel>
+            <translation><!-- Reported Lost --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <help><!-- Does this book belong to the St. Martin&apos;s collection? --></help>
+        <label><!-- St. Martin&apos;s Collection --></label>
+        <name>St_Martin__c</name>
+    </fields>
+    <fields>
+        <label><!-- Student Waiting On Copy --></label>
+        <name>Waiting_Student__c</name>
+        <relationshipLabel><!-- Copies of Books --></relationshipLabel>
+    </fields>
+    <layouts>
+        <layout>Copy of Book Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

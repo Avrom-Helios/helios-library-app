@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Book</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Books</value>
+    </caseValues>
+    <fields>
+        <label><!-- Author --></label>
+        <name>Author_Display_Name__c</name>
+    </fields>
+    <fields>
+        <label><!-- Author First Name --></label>
+        <name>Author_First_Name__c</name>
+    </fields>
+    <fields>
+        <label><!-- Author Last Name --></label>
+        <name>Author_Last_Name__c</name>
+    </fields>
+    <fields>
+        <label><!-- Author_long --></label>
+        <name>Author_long__c</name>
+    </fields>
+    <fields>
+        <label><!-- Author_short --></label>
+        <name>Author_short__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of copies of this book that are not currently checked out --></help>
+        <label><!-- Checked In Copies --></label>
+        <name>Available_Copies__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of copies checked in but on hold --></help>
+        <label><!-- Copies On Hold --></label>
+        <name>Copies_On_Hold__c</name>
+    </fields>
+    <fields>
+        <label><!-- Publication Year --></label>
+        <name>Copyright_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Cutter Correct --></label>
+        <name>Cutter_Correct__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Dewey Decimal Number WITHOUT any letters. --></help>
+        <label><!-- Dewey Decimal Number --></label>
+        <name>DDN__c</name>
+    </fields>
+    <fields>
+        <label><!-- Dewey_Dec_Number --></label>
+        <name>Dewey_Dec_Number__c</name>
+    </fields>
+    <fields>
+        <label><!-- Dewey Decimal Code --></label>
+        <name>Dewey_Decimal_Code__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of copies of the book available (not checked out or on hold) --></help>
+        <label><!-- Generally Available Copies --></label>
+        <name>Generally_Available_Copies__c</name>
+    </fields>
+    <fields>
+        <label><!-- ISBN --></label>
+        <name>ISBN__c</name>
+    </fields>
+    <fields>
+        <label><!-- IsFiction --></label>
+        <name>IsFiction__c</name>
+    </fields>
+    <fields>
+        <label><!-- IsNumericVal --></label>
+        <name>IsNumericVal__c</name>
+    </fields>
+    <fields>
+        <label><!-- Level --></label>
+        <name>Level__c</name>
+    </fields>
+    <fields>
+        <label><!-- Location --></label>
+        <name>Location__c</name>
+        <relationshipLabel><!-- Books --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- For books in locations requiring manual Cutter Code entry (such as biographies), enter a three letter code (in the case of biographies, usually the upper-case version of the first three letters of the subject&apos;s last name). --></help>
+        <label><!-- Cutter Code --></label>
+        <name>Manual_Cutter_Code__c</name>
+    </fields>
+    <fields>
+        <label><!-- Newbery Book --></label>
+        <name>Newberry_Book__c</name>
+    </fields>
+    <fields>
+        <label><!-- NumericVal --></label>
+        <name>NumericVal__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of seekers who are currently waiting on this book. --></help>
+        <label><!-- Seekers Waiting --></label>
+        <name>Seekers_Waiting__c</name>
+    </fields>
+    <fields>
+        <help><!-- A brief summary of the book --></help>
+        <label><!-- Summary --></label>
+        <name>Summary__c</name>
+    </fields>
+    <fields>
+        <label><!-- Title --></label>
+        <name>Title_36__c</name>
+    </fields>
+    <fields>
+        <label><!-- Title --></label>
+        <name>Title__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of copies of this book owned by the library --></help>
+        <label><!-- Total Copies --></label>
+        <name>Total_Copies__c</name>
+    </fields>
+    <layouts>
+        <layout>Book Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Invalid publication year. --></errorMessage>
+        <name>Check_Pub_Year</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter a number greater than 000 and less than 1000. --></errorMessage>
+        <name>DDN_Is_Numeric</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Cutter Codes should be specified for biographies. Use the first three letters of the subject&apos;s last name, or the first three letters of the author&apos;s last name for biographies of groups. --></errorMessage>
+        <name>cutter_supplied</name>
+    </validationRules>
+</CustomObjectTranslation>

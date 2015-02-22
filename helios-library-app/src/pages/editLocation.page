@@ -1,0 +1,16 @@
+<apex:page controller="EditLocationController">
+  <apex:form >
+    <apex:pageBlock title="{!IF(ISBLANK(Location.Name), 'New ' + Location.Main_Location__r.Name + ' Location', 'Location: ' + Location.Name)}">
+      <apex:pageBlockButtons >
+          <apex:commandButton value="Save" action="{!doSave}" />
+          <apex:commandButton value="Cancel" action="{!cancel}" />
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection >
+          <apex:inputField value="{!Location.name}"/>
+          <apex:outputField value="{!Location.main_location__r.Name}" />
+          <apex:inputField value="{!Location.Check_Out_Allowed__c}"/>
+          <apex:inputField value="{!Location.For_Young_Adults__c}"/>
+      </apex:pageBlockSection>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

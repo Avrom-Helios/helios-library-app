@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>newBook</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <content>newBook</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <content>BooksList</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>Book</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Author_Display_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>Author_Last_Name__c  &amp;   IF(! ISBLANK( Author_First_Name__c) , &apos;, &apos; &amp;  Author_First_Name__c, &apos;&apos;)</formula>
+        <label>Author</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Author_First_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Author First Name</label>
+        <length>40</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Author_Last_Name__c</fullName>
+        <description>The last name of the first author on the book</description>
+        <externalId>false</externalId>
+        <label>Author Last Name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Author_long__c</fullName>
+        <description>First 36 chars of author full name</description>
+        <externalId>false</externalId>
+        <formula>LEFT( Author_Display_Name__c , 36)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Author_long</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Author_short__c</fullName>
+        <description>First three letters of author last name, or manual cutter code for books providing them</description>
+        <externalId>false</externalId>
+        <formula>IF( ISBLANK(Manual_Cutter_Code__c) , 
+LEFT(UPPER( Author_Last_Name__c) , 3), 
+UPPER( Manual_Cutter_Code__c ) 
+)</formula>
+        <label>Author_short</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Available_Copies__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of copies of this book that are not currently checked out</inlineHelpText>
+        <label>Checked In Copies</label>
+        <summaryFilterItems>
+            <field>Book_Copy__c.Is_Checked_Out__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Book_Copy__c.Permanent_Status__c</field>
+            <operation>notEqual</operation>
+            <value>Reported Lost, Missing, Destroyed, Removed from Collection, Erroneous Entry</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Book_Copy__c.Book__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Copies_On_Hold__c</fullName>
+        <externalId>false</externalId>
+        <formula>MIN( Available_Copies__c , Seekers_Waiting__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The number of copies checked in but on hold</inlineHelpText>
+        <label>Copies On Hold</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Copyright_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Publication Year</label>
+        <length>4</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Cutter_Correct__c</fullName>
+        <description>Whether the cutter number is provided for biographies, and inferred for non-biographies.</description>
+        <externalId>false</externalId>
+        <formula>IF( BEGINS(DDN__c, &apos;04&apos;) || 
+    (BEGINS(DDN__c, &apos;92&apos;) &amp;&amp; 
+       NOT(BEGINS(DDN__c, &apos;929&apos;))), 
+    NOT(ISBLANK( Manual_Cutter_Code__c )), 
+    ISBLANK( Manual_Cutter_Code__c )
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Cutter Correct</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>DDN__c</fullName>
+        <description>The numeric part of a Dewey Decimal Code.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Dewey Decimal Number WITHOUT any letters.</inlineHelpText>
+        <label>Dewey Decimal Number</label>
+        <length>10</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Dewey_Dec_Number__c</fullName>
+        <externalId>false</externalId>
+        <formula>LEFT( DDN__c , 9)</formula>
+        <label>Dewey_Dec_Number</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Dewey_Decimal_Code__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Location__r.Main_Location__r.Uses_Dewey_Decimal_Coding__c,
+    IF(  ISBLANK(Manual_Cutter_Code__c)  , 
+         DDN__c  &amp; &apos; &apos; &amp;  LEFT(UPPER( Author_Last_Name__c) , 3),
+         DDN__c &amp; &apos; &apos; &amp; UPPER( Manual_Cutter_Code__c )
+    ),
+    null
+)</formula>
+        <label>Dewey Decimal Code</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Generally_Available_Copies__c</fullName>
+        <externalId>false</externalId>
+        <formula>Available_Copies__c -  Copies_On_Hold__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The number of copies of the book available (not checked out or on hold)</inlineHelpText>
+        <label>Generally Available Copies</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ISBN__c</fullName>
+        <externalId>false</externalId>
+        <label>ISBN</label>
+        <length>13</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IsFiction__c</fullName>
+        <externalId>false</externalId>
+        <formula>Location__r.Main_Location__r.Name = &apos;Fiction&apos;</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>IsFiction</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IsNumericVal__c</fullName>
+        <externalId>false</externalId>
+        <formula>ISNUMBER( BLANKVALUE(TRIM(DDN__c),&apos;0&apos;))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>IsNumericVal</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Level__c</fullName>
+        <externalId>false</externalId>
+        <label>Level</label>
+        <length>5</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Location</label>
+        <referenceTo>Location__c</referenceTo>
+        <relationshipLabel>Books</relationshipLabel>
+        <relationshipName>Books</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Manual_Cutter_Code__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>For books in locations requiring manual Cutter Code entry (such as biographies), enter a three letter code (in the case of biographies, usually the upper-case version of the first three letters of the subject&apos;s last name).</inlineHelpText>
+        <label>Cutter Code</label>
+        <length>3</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Newberry_Book__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Newbery Book</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>NumericVal__c</fullName>
+        <externalId>false</externalId>
+        <formula>BLANKVALUE(TRIM(DDN__c),&apos;0&apos;)</formula>
+        <label>NumericVal</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Seekers_Waiting__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of seekers who are currently waiting on this book.</inlineHelpText>
+        <label>Seekers Waiting</label>
+        <summaryFilterItems>
+            <field>Waitlist_Entry__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Waiting, Notified</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Waitlist_Entry__c.Book__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Summary__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>A brief summary of the book</inlineHelpText>
+        <label>Summary</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>Html</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Title_36__c</fullName>
+        <externalId>false</externalId>
+        <formula>LEFT(Title__c, 36)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Title</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Title__c</fullName>
+        <externalId>false</externalId>
+        <label>Title</label>
+        <length>255</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Copies__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of copies of this book owned by the library</inlineHelpText>
+        <label>Total Copies</label>
+        <summaryFilterItems>
+            <field>Book_Copy__c.Permanent_Status__c</field>
+            <operation>notEqual</operation>
+            <value>Reported Lost, Missing, Destroyed, Removed from Collection, Erroneous Entry</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Book_Copy__c.Book__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <label>Book</label>
+    <nameField>
+        <label>Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Books</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Author_Display_Name__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Copyright_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>DDN__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Generally_Available_Copies__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Newberry_Book__c</customTabListAdditionalFields>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <lookupDialogsAdditionalFields>Author_Display_Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Title__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Generally_Available_Copies__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>Author_Last_Name__c</searchFilterFields>
+        <searchFilterFields>Author_First_Name__c</searchFilterFields>
+        <searchFilterFields>Title__c</searchFilterFields>
+        <searchFilterFields>Copyright_Date__c</searchFilterFields>
+        <searchFilterFields>Location__c</searchFilterFields>
+        <searchFilterFields>Newberry_Book__c</searchFilterFields>
+        <searchResultsAdditionalFields>Author_Display_Name__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Copyright_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Location__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Dewey_Decimal_Code__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Generally_Available_Copies__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Newberry_Book__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>Check_Pub_Year</fullName>
+        <active>true</active>
+        <description>Checks a number of things:
+1) That the pub year text is actually a #
+2) That it&apos;s 4 digits (may have to revisit for books &quot;published&quot; before 1000)
+3) That it&apos;s no more than a year in the future (year added to account for drafts/advance copies).</description>
+        <errorConditionFormula>OR(VALUE( Copyright_Date__c ) &lt; 1000 ,VALUE(Copyright_Date__c ) &gt; YEAR(TODAY()) + 1)</errorConditionFormula>
+        <errorDisplayField>Copyright_Date__c</errorDisplayField>
+        <errorMessage>Invalid publication year.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>DDN_Is_Numeric</fullName>
+        <active>true</active>
+        <errorConditionFormula>NOT(ISNUMBER( BLANKVALUE(TRIM(DDN__c),&apos;0&apos;)))</errorConditionFormula>
+        <errorDisplayField>DDN__c</errorDisplayField>
+        <errorMessage>Please enter a number greater than 000 and less than 1000.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>cutter_supplied</fullName>
+        <active>true</active>
+        <errorConditionFormula>IF(Location__r.Main_Location__r.Uses_Dewey_Decimal_Coding__c, NOT(Cutter_Correct__c),
+false)</errorConditionFormula>
+        <errorDisplayField>Manual_Cutter_Code__c</errorDisplayField>
+        <errorMessage>Cutter Codes should be specified for biographies. Use the first three letters of the subject&apos;s last name, or the first three letters of the author&apos;s last name for biographies of groups.</errorMessage>
+    </validationRules>
+</CustomObject>

@@ -1,0 +1,31 @@
+<apex:page standardController="Main_Location__c" extensions="MainLocationListExtension" recordSetVar="mLocations">
+  <apex:form >
+    <apex:pageBlock title="Main Locations" id="ourPageBlock">
+
+      <apex:pageBlockButtons >
+          <apex:commandButton value="New Main Location" action="{!URLFOR($Action.Main_Location__c.New, $ObjectType.Main_Location__c)}"/>
+      </apex:pageBlockButtons>
+      <apex:repeat value="{!mLocations}" var="mLocation" >
+        <apex:pageBlockSection title="{!mLocation.name}" columns="1">
+        <apex:panelGrid columns="3">
+            <apex:commandButton value="New {!mLocation.name} Location" action="{!createLocation}" rerender="ourPageBlock" >
+              <apex:param name="selectedMainLoc" assignTo="{!selectedMainLoc}" value="{!mLocation.id}" />
+            </apex:commandButton>
+            <apex:commandButton value="Edit Main Location Info: {!mLocation.name}" action="{!URLFOR($Action.Main_Location__c.Edit, mLocation.id)}"  />
+            <apex:commandButton value="Delete Main Location: {!mLocation.name}" action="{!doDelete}" rerender="ourPageBlock" onclick="if (!confirm('This will delete the main location {!mLocation.name} and all of the locations under it. Books in any of those locations will no longer have a location listed.')) return false;" >
+              <apex:param name="selectedMainLoc" assignTo="{!selectedMainLoc}" value="{!mLocation.id}" />
+            </apex:commandButton>
+            
+        </apex:panelGrid>
+          <apex:pageBlockTable value="{!mLocation.Sublocations__r}" var="subLocation">
+              <apex:column headerValue="{!mLocation.name} Locations">
+                <apex:commandLink value="{!subLocation.name}"  action="{!viewLocation}" >
+                  <apex:param name="selectedLoc" assignTo="{!selectedLoc}" value="{!subLocation.id}"/>
+                </apex:commandLink>
+             </apex:column>
+          </apex:pageBlockTable>
+        </apex:pageBlockSection>
+      </apex:repeat>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

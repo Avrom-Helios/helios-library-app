@@ -1,0 +1,12 @@
+<apex:page standardController="Main_Location__c" extensions="MainLocationCreateExtension" >
+  <apex:form >
+    <apex:pageBlock >
+      <apex:pageBlockButtons >
+          <apex:commandButton value="Save" action="{!doInsert}"/>
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection >
+          <apex:inputField value="{!Main_Location__c.name}" required="true"/>
+      </apex:pageBlockSection>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

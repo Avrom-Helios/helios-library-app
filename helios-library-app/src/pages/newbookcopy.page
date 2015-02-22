@@ -1,0 +1,14 @@
+<apex:page controller="NewBookCopyController">
+  <apex:form >
+    <apex:pageBlock title="New Copy of '{!newCopy.book__r.Title__c}'" >
+       <apex:pageBlockButtons >
+           <apex:commandButton value="Save" action="{!save}" />
+           <apex:commandButton value="Cancel" action="{!cancel}" />
+       </apex:pageBlockButtons>
+       <apex:pageBlockSection >
+           <apex:outputField value="{!newCopy.book__r.Author_Display_Name__c}" />
+           <apex:inputField value="{!newCopy.Donated_By__c}" />
+       </apex:pageBlockSection>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>32.0</apiVersion>
+    <available>true</available>
+    <description>Sent to opted-in parents when pre-middle-school students check out a YA book.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>YA Checkout Notification</name>
+    <style>none</style>
+    <subject>YA Book Checkout Notification</subject>
+    <type>visualforce</type>
+</EmailTemplate>

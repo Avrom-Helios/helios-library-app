@@ -1,0 +1,135 @@
+<apex:page standardController="Book__c" extensions="NewBookExtension"  >
+  <script type="text/javascript">
+    var isbn;
+    var currentGoogleBooksListScript;
+    var currentGoogleBooksGetScript;
+
+    function retrieveBookInfoFromIsbn(isbn_param) {
+        isbn = isbn_param;
+        if (!isbn || !(isbn.length == 10 || isbn.length == 13)) {
+            alert("Please enter the book's ISBN (10 or 13-digit identifier)");
+        } else  {     
+            currentGoogleBooksListScript = addScriptToHead('https://www.googleapis.com/books/v1/volumes?callback=processBookResult&q=' + isbn);
+        }
+        return false;
+    }
+    
+    function addScriptToHead(source) {
+        var head= document.getElementsByTagName('head')[0];
+        var script= document.createElement('script');
+        script.type= 'text/javascript';
+        script.src= source;
+        head.appendChild(script);
+        return script;
+    }
+    
+      function processBookResult(response) {
+        var head= document.getElementsByTagName('head')[0];
+        head.removeChild(currentGoogleBooksListScript);
+        var correctBook;
+        if (response.items) {
+            for (var i=0; i < response.items.length; i++) {
+                var currResult = response.items[i];
+                var isCorrect = null
+                for (var j=0; j < currResult.volumeInfo.industryIdentifiers.length; j++) {
+                    if (currResult.volumeInfo.industryIdentifiers[j].identifier == isbn) {
+                        correctBook = currResult;
+                        break;
+                    }
+                }
+                if (correctBook) {
+                    break;
+                }
+            }
+            if (correctBook) {
+                currentGoogleBooksGetScript = addScriptToHead('https://www.googleapis.com/books/v1/volumes/' + correctBook.id + '?callback=processBook');
+            } else {
+                alert('Not found!');
+            }
+        }
+    }
+    
+    function processBook(bookDetails) {
+        var head= document.getElementsByTagName('head')[0];
+        head.removeChild(currentGoogleBooksGetScript);
+        document.getElementById('{!$Component.mainForm.mainPageBlock.topSection.title}').value = bookDetails.volumeInfo.title;
+        document.getElementById('{!$Component.mainForm.mainPageBlock.bottomSection.summary}').value = bookDetails.volumeInfo.description;
+        var dateBits = bookDetails.volumeInfo.publishedDate.split('-'); //might be year only, might be YYYY-mm-dd
+        document.getElementById('{!$Component.mainForm.mainPageBlock.topSection.copyrightDate}').value = dateBits[0];
+        if (bookDetails.volumeInfo.authors && bookDetails.volumeInfo.authors.length > 0) {
+            var firstAuthor = bookDetails.volumeInfo.authors[0];
+            var lastSpace = firstAuthor.lastIndexOf(' ');
+            document.getElementById('{!$Component.mainForm.mainPageBlock.topSection.firstName}').value = firstAuthor.substring(0,lastSpace);
+            document.getElementById('{!$Component.mainForm.mainPageBlock.topSection.lastName}').value = firstAuthor.substring(lastSpace + 1);
+        }
+    }
+    
+    function resetCutterCode(ccComponent, ddn) {
+        if (!ccComponent) {
+            return;
+        }
+        var shouldDisable = 
+            !ddn ||
+            ddn == '' ||
+            Number(ddn) < 40 ||
+            (50 <= Number(ddn) && Number(ddn) < 920) ||
+            929 <= Number(ddn);
+        if (shouldDisable) { ccComponent.value = '';}
+        ccComponent.readOnly = (shouldDisable ? true : null);
+    }
+    
+    
+  </script>
+  <apex:form id="mainForm">
+    <apex:pageBlock id="mainPageBlock" title="{!IF(Book__c.id == null, 'New Book', Book__c.Title__c)}"
+                    >
+        <apex:messages />
+      <apex:pageBlockButtons >
+          <apex:commandButton value="Save" action="{!doSaveOrFindExisting}"/>
+          <apex:commandButton value="Cancel" action="{!cancel}" immediate="true" />
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection id="topSection" >
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel for="isbn">ISBN</apex:outputLabel>
+          <apex:panelGrid columns="2">
+            <apex:inputField id="isbn" value="{!Book__c.ISBN__c}"/>
+            <apex:commandButton value="Retrieve Book Info from ISBN" onclick="return retrieveBookInfoFromIsbn(document.getElementById('{!$Component.isbn}').value);"/>
+          </apex:panelGrid>
+        </apex:pageBlockSectionItem>
+        <apex:inputField id="title" value="{!Book__c.Title__c}"/>
+        <apex:inputField id="lastName" value="{!Book__c.Author_Last_Name__c}"/>
+        <apex:inputField id="firstName" value="{!Book__c.Author_First_Name__c}"/>
+        
+        <apex:inputField id="copyrightDate" value="{!Book__c.Copyright_Date__c}"/>
+        <apex:inputField value="{!Book__c.Newberry_Book__c}" />
+        <apex:pageBlockSectionItem rendered="{!useDDN}" helpText="{!$ObjectType.Book__c.Fields.DDN__c.inlineHelpText}" >
+            <apex:outputLabel for="ddn">Dewey Decimal Number</apex:outputLabel>
+            <apex:outputpanel layout="block" styleClass="requiredInput" >
+                <apex:outputpanel layout="block" styleClass="requiredBlock" />
+            <apex:inputField value="{!Book__c.DDN__c}"
+                         id="ddn" 
+                         onChange="resetCutterCode(document.getElementById('{!$Component.cuttercode}'), this.value)"/>
+            </apex:outputpanel>
+         </apex:pageBlockSectionItem>
+          <apex:inputField value="{!Book__c.Manual_Cutter_Code__c}"
+                           rendered="{!useDDN}"
+                         id="cuttercode" 
+                          />
+      </apex:pageBlockSection>
+     
+
+      <apex:pageBlockSection id="bottomSection" columns="1">
+        <apex:inputTextarea id="summary" value="{!Book__c.Summary__c}" cols="80" rows="5" />
+        <apex:inputField value="{!Book__c.Location__c}" required="true"  >
+            <apex:actionSupport event="onchange" action="{!relocate}" reRender="mainPageBlock"
+                                 />
+          </apex:inputField>
+      </apex:pageBlockSection>
+        <script>
+        resetCutterCode(document.getElementById('{!$Component.mainForm.mainPageBlock.topSection.cuttercode}'), '{!JSENCODE(IF(ISBLANK(Book__c.DDN__c), null, Book__c.DDN__c))}');
+    </script>
+    </apex:pageBlock>
+      
+  </apex:form>
+    
+</apex:page>

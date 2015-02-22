@@ -1,0 +1,93 @@
+<apex:page title="{!Book__c.Title__c}" standardController="Book__c" extensions="BookExtension" showHeader="{!$Profile.Name!='Seeker'}" >
+	<apex:image rendered="{!$Profile.Name='Seeker'}" value="{!URLFOR($Resource.HeliosLogo)}"/>
+    <apex:pageMessages />
+	<apex:form >
+        <apex:pageBlock title="{!Book__c.Title__c}">
+            <apex:pageBlockButtons >
+        		<apex:commandButton action="{!edit}" value="Edit Book Information" immediate="true" />
+        		<apex:commandButton action="{!delete}"
+                                    onclick="return confirm('This will delete all copies of this book and all book information. Are you sure you want to do this?')"
+                                    value="Delete Book from Database" />
+                <apex:commandButton action="{!URLFOR($Action.Waitlist_Entry__c.New, $ObjectType.Waitlist_Entry__c, [bookId=Book__c.id])}"
+                                    value="Add Yourself to the Waitlist for This Book"
+                                    rendered="{!Book__c.Location__r.Check_Out_Allowed__c && Book__c.Generally_Available_Copies__c == 0 && $Profile.Name='Seeker'}" />
+                <apex:commandButton onclick="window.location = 'apex/BooksList'; return false;" value="Return to Search" />
+            </apex:pageBlockButtons>
+      		<apex:pageBlockSection id="bookSection">
+        		<apex:outputField value="{!Book__c.ISBN__c}" />
+        		<apex:outputField value="{!Book__c.Author_Display_Name__c}" />
+        		<apex:pageBlockSectionItem >
+          			<apex:outputLabel for="fullLocation" value="Location" />
+          			<apex:outputText id="fullLocation" value="{!Book__c.Location__r.Main_Location__r.Name & ' - ' & Book__c.Location__r.Name}" />
+        		</apex:pageBlockSectionItem>
+                <apex:outputField rendered="{!Book__c.Location__r.Main_Location__r.Uses_Dewey_Decimal_Coding__c}" value="{!Book__c.Dewey_Decimal_Code__c}"/>
+        		<apex:outputField value="{!Book__c.Copyright_Date__c}" />
+        		<apex:outputField value="{!Book__c.Total_Copies__c}" />
+        		<apex:outputField value="{!Book__c.Copies_On_Hold__c}" id="copiesOnHold" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel styleClass="helpButton" for="generallyAvailableCopies" value="{!$ObjectType.Book__c.Fields.Generally_Available_Copies__c.label}">
+                    <img src="/s.gif" alt="Help" class="helpOrb" title="{!$ObjectType.Book__c.Fields.Generally_available_copies__c.inlineHelpText}"/>
+                    </apex:outputLabel>
+                    <apex:outputField value="{!Book__c.Generally_Available_Copies__c}" id="generallyAvailableCopies" />
+
+                </apex:pageBlockSectionItem>
+        		<apex:outputField value="{!Book__c.Summary__c}" />
+                <apex:outputField value="{!Book__c.Newberry_Book__c}" />
+          		<apex:outputField id="canCheckout"  value="{!Book__c.Location__r.Check_Out_Allowed__c}" />
+      		</apex:pageBlockSection>
+            <apex:pageBlockSection title="Copies of This Book" columns="1" id="copiesSection">
+                <apex:commandButton value="New Copy" action="{!URLFOR($Page.NewBookCopy, null, [bookId=Book__c.id])}" rendered="{!$ObjectType.Book_Copy__c.createable}" />
+                <apex:pageBlockTable title="Copies of Book" value="{!copies}" var="copy" >
+                    <apex:column value="{!copy.Copy_Number__c}" />
+                    <apex:column headerValue="Status">
+                        <apex:outputPanel rendered="{!Book__c.location__r.Check_Out_Allowed__c}">
+                            <apex:outputPanel rendered="{!copy.checkouts__r.empty}">
+                                <apex:outputText rendered="{!ISBLANK(copy.Waiting_Student__c)}">Generally Available</apex:outputText>
+                                <apex:outputText rendered="{!!ISBLANK(copy.Waiting_Student__c)}">Reserved</apex:outputText>
+                            </apex:outputPanel>
+                            <apex:outputText rendered="{!!copy.checkouts__r.empty}">Checked Out</apex:outputText>
+                        </apex:outputPanel>
+                        <apex:outputText rendered="{!!Book__c.location__r.Check_Out_Allowed__c}">In-Library Use Only</apex:outputText>
+                    </apex:column>
+                    <apex:column headerValue="Checked Out By/Reserved For" rendered="{!$Profile.Name!='Seeker' && Book__c.location__r.Check_Out_Allowed__c}">
+                        <apex:outputText rendered="{!!copy.checkouts__r.empty}">{!copy.checkouts__r[0].student__r.name}</apex:outputText>
+                        <apex:outputText rendered="{!copy.checkouts__r.empty && !ISBLANK(copy.Waiting_Student__c)}">{!copy.Waiting_Student__r.student__r.name}</apex:outputText>                 
+                    </apex:column>
+                    <apex:column headerValue="Actions" rendered="{!Book__c.location__r.Check_Out_Allowed__c || $ObjectType.Book_Copy__c.updateable}">
+                        <apex:commandLink action="{!URLFOR($Action.Book_Copy__c.Edit, copy.id)}" rendered="{!$ObjectType.Book_Copy__c.updateable && !Book__c.location__r.Check_Out_Allowed__c}">Edit</apex:commandLink>
+                       	<apex:panelGrid columns="{!IF($ObjectType.Book_Copy__c.updateable, 1, 0) + IF(ISBLANK(copy.Waiting_Student__c) || $Profile.Name!='Seeker', 1, 0)}" rendered="{!Book__c.location__r.Check_Out_Allowed__c && copy.checkouts__r.empty}" frame="none" border="0" cellpadding="0" cellspacing="0">
+                        	<apex:commandLink action="{!URLFOR($Action.Book_Copy__c.Edit, copy.id)}" rendered="{!$ObjectType.Book_Copy__c.updateable}">Edit</apex:commandLink>
+                            <apex:commandLink rendered="{!ISBLANK(copy.Waiting_Student__c)}" action="{!URLFOR($Action.Checkout__c.New, $ObjectType.Checkout__c, ['bcid'=copy.id, 'retURL'='apex/Book?id='+Book__c.id])}">Check Out</apex:commandLink>
+                            <apex:commandLink action="{!checkOutForReserved}" rendered="{!!ISBLANK(copy.Waiting_Student__c) && $Profile.Name!='Seeker'}" value="Check out for {!copy.waiting_student__r.student__r.name}">
+                            	<apex:param name="copyId" value="{!copy.id}"/>
+                            </apex:commandLink>
+                        </apex:panelGrid>
+                        <apex:outputPanel rendered="{!!copy.checkouts__r.empty && Book__c.location__r.Check_Out_Allowed__c}">
+                            <apex:panelGrid columns="{!IF($ObjectType.Book_Copy__c.updateable, 1, 0) + IF(copy.checkouts__r[0].Times_Renewed__c < 4 && extraWaitlist.size == 0, 2, 1)}" frame="none" border="0" cellpadding="0" cellspacing="0">
+                                <apex:commandLink action="{!URLFOR($Action.Book_Copy__c.Edit, copy.id)}" rendered="{!$ObjectType.Book_Copy__c.updateable}">Edit</apex:commandLink>
+                                <apex:commandLink rendered="{!$Profile.Name!='Seeker'}" action="{!checkIn}" value="Check In">
+                                	<apex:param name="copyId" value="{!copy.id}"/>
+                                </apex:commandLink>
+                                <apex:commandLink rendered="{!copy.checkouts__r[0].Times_Renewed__c < 4 && extraWaitlist.size == 0}" action="{!renew}" value="Renew">
+                                	<apex:param name="copyId" value="{!copy.id}"/>
+                                </apex:commandLink>
+                            </apex:panelGrid> 
+                        </apex:outputPanel>
+                    </apex:column>
+                    <apex:column headerValue="Times Renewed" rendered="{!Book__c.location__r.Check_Out_Allowed__c}">
+                        <apex:outputText rendered="{!!copy.checkouts__r.empty}">{!copy.checkouts__r[0].Times_Renewed__c}</apex:outputText>
+                    </apex:column> 
+                    <apex:column value="{!copy.Donated_By__c}" />
+                    <apex:column value="{!copy.St_Martin__c}" />
+                </apex:pageBlockTable>   
+            </apex:pageBlockSection>
+          <apex:pageBlockSection title="Additional Waitlist for This Book" columns="1" rendered="{!Book__c.Location__r.Check_Out_Allowed__c && Book__c.Generally_Available_Copies__c == 0 && $Profile.Name!='Seeker'}">
+            <apex:commandButton value="Add Student to Waitlist" action="{!URLFOR($Action.Waitlist_Entry__c.New, $ObjectType.Waitlist_Entry__c, [bookId=Book__c.id])}" />
+              <apex:pageBlockTable title="Waitlist" value="{!extraWaitlist}" var="waitlistEntry" rendered="{!Book__c.Location__r.Check_Out_Allowed__c && Book__c.Generally_Available_Copies__c == 0}" >
+                  <apex:column value="{!waitlistEntry.Student__c}" />
+                  <apex:column value="{!waitlistEntry.Wait_Time__c}" />
+              </apex:pageBlockTable>
+          </apex:pageBlockSection>
+        </apex:pageBlock>
+	</apex:form>
+</apex:page>

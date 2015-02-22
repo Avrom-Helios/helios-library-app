@@ -1,0 +1,21 @@
+<apex:page standardController="Contact">
+    <apex:messages />
+    <apex:form >
+      <apex:pageBlock title="Create/Edit Student">
+          <apex:pageBlockSection id="thePageBlockSection" >
+              <apex:inputField value="{!Contact.LastName}" required="true"/>
+              <apex:inputField value="{!Contact.FirstName}" required="true" />
+              <apex:inputField value="{!Contact.Email}" required="true" />
+              <apex:inputField value="{!Contact.Parent_Email_1__c}" required="true" />
+              <apex:inputField value="{!Contact.Parent_Email_2__c}" />
+              <apex:inputField value="{!Contact.Year_Entered_Expected_Middle_School__c}">
+                  <apex:actionSupport event="onchange" rerender="thePageBlockSection" />
+              </apex:inputField>
+              <apex:inputField value="{!Contact.YA_Notification_Opt_In__c}"
+                               rendered="{!YEAR(TODAY()) < Contact.Year_Entered_Expected_Middle_School__c || (YEAR(TODAY()) = Contact.Year_Entered_Expected_Middle_School__c && MONTH(TODAY()) < 8)}" />
+          </apex:pageBlockSection>
+          <apex:commandButton value="Save" action="{!Save}" />
+          <apex:commandButton value="Cancel" action="{!Cancel}" />
+      </apex:pageBlock>
+    </apex:form>
+</apex:page>

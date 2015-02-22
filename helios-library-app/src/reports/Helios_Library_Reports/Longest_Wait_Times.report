@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <aggregates>
+        <calculatedFormula>Waitlist_Entry__c.Wait_Time__c:SUM</calculatedFormula>
+        <datatype>number</datatype>
+        <description>Wait Times for Availability, Totalled Across Students</description>
+        <developerName>FORMULA1</developerName>
+        <downGroupingContext>Book__c$Title__c</downGroupingContext>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Total Wait Time</masterLabel>
+        <scale>0</scale>
+    </aggregates>
+    <columns>
+        <field>Book__c.Waitlist__r$Wait_Time__c</field>
+    </columns>
+    <description>Which books have had the longest wait times? Make sure to choose dates before you run this report.</description>
+    <filter>
+        <criteriaItems>
+            <column>Book__c$Title__c</column>
+            <operator>equals</operator>
+            <value></value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Book__c$Title__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Longest Wait Times</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Longest_Wait_Times__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Book__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

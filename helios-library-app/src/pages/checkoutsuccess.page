@@ -1,0 +1,16 @@
+<apex:page StandardController="Checkout__c" showHeader="{!$Profile.Name!='Seeker'}">
+    <apex:image rendered="{!$Profile.Name='Seeker'}" value="{!URLFOR($Resource.HeliosLogo)}"/>
+    <apex:form >
+  <apex:pageBlock title="Book Checked Out">
+      <apex:pageBlockButtons >
+        <apex:commandButton onclick="window.location = 'apex/BooksList'; return false;" value="Return to Search" />
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection collapsible="false" title="Your Book is Due {!Checkout__c.Due_Date__c}" rendered="{!$Profile.Name == 'Seeker'}" />
+      <apex:pageBlockSection collapsible="false" rendered="{!$Profile.Name != 'Seeker'}" title="Due Date {!Checkout__c.Due_Date__c}" >                                                                                 
+          <apex:outputField value="{!Checkout__c.book_copy__r.book__r.Title__c}" />
+          <apex:outputField value="{!Checkout__c.book_copy__r.book__r.Author_Display_Name__c}" />
+          <apex:outputField value="{!Checkout__c.book_copy__r.Copy_Number__c}"/>
+      </apex:pageBlockSection>
+  </apex:pageBlock>
+        </apex:form>
+</apex:page>

@@ -1,0 +1,15 @@
+<apex:page StandardController="Waitlist_Entry__c" showHeader="{!$Profile.Name!='Seeker'}">
+    <apex:image rendered="{!$Profile.Name='Seeker'}" value="{!URLFOR($Resource.HeliosLogo)}"/>
+
+    <apex:form >
+  <apex:pageBlock title="Success!">
+      <apex:pageBlockButtons >
+        
+          <apex:commandButton value="Return to Search" onclick="window.location = 'apex/BooksList'; return false;" />
+        
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection collapsible="false" title="You will be notified when your book becomes available." rendered="{!$Profile.Name == 'Seeker'}" />
+      <apex:pageBlockSection collapsible="false" rendered="{!$Profile.Name != 'Seeker'}" title="The student will be notified when the book becomes available." />                                                                                 
+  </apex:pageBlock>
+        </apex:form>
+</apex:page>

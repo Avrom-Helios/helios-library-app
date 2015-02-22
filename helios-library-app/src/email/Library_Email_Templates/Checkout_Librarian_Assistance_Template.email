@@ -1,0 +1,12 @@
+<messaging:emailTemplate subject="Librarian Assistance Required: Seriously Past Due Book for {!relatedTo.student__r.name}" recipientType="User" relatedToType="Checkout__c">
+<messaging:plainTextEmailBody >
+Dear Librarian,
+
+{!relatedTo.student__r.name} has not checked in the book "{!relatedTo.book_copy__r.book__r.Title__c}" by {!relatedTo.book_copy__r.book__r.Author_First_Name__c} {!relatedTo.book_copy__r.book__r.Author_Last_Name__c}, despite multiple email reminders. This book is now {!FLOOR(relatedTo.Days_Overdue__c)} days past due. Please help the student check in the book as soon as possible.
+
+No further reminders will be sent for this checkout.
+
+Best,
+The Helios Library Application
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

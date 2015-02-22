@@ -1,0 +1,12 @@
+<messaging:emailTemplate subject="YA Book Checkout Notification" recipientType="Contact" relatedToType="Checkout__c">
+<messaging:plainTextEmailBody >
+Dear parents,
+
+{!relatedTo.student__r.firstname} has checked the following book out of the YA section of the Helios library:
+
+"{!relatedTo.book_copy__r.book__r.Title__c}" by {!relatedTo.book_copy__r.book__r.Author_First_Name__c} {!relatedTo.book_copy__r.book__r.Author_Last_Name__c}
+
+Best,
+The Helios Library Application
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

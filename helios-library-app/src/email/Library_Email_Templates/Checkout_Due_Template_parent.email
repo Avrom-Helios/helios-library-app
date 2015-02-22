@@ -1,0 +1,10 @@
+<messaging:emailTemplate subject="{!relatedTo.student__r.name}'s book is now due" recipientType="User" relatedToType="Checkout__c">
+<messaging:plainTextEmailBody >
+Dear Parents,
+
+{!relatedTo.student__r.firstname} has a book checked out of the library that is due today. Please help {!relatedTo.student__r.firstname} remember to return it to the library.
+
+Best,
+The Helios Library Application
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

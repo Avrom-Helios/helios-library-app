@@ -1,0 +1,60 @@
+<apex:page title="Welcome to the Library!" tabStyle="Book__c" showHeader="{!$Profile.Name!='Seeker'}" controller="BookSearchController" >
+  <apex:image rendered="{!$Profile.Name='Seeker'}" value="{!URLFOR($Resource.HeliosLogo)}"/>
+
+    <apex:form >
+      <apex:pageBlock id="thePageBlock" title="Welcome to the Library!" >
+          <apex:messages />
+          <apex:pageBlockSection columns="1" id="searchPageBlockSection" title="Search for a book by words" >
+              <apex:pageBlockSectionItem id="theSectionItem" helpText="You can search for words in the book's title, the first or last name of the book's author, or even words describing what the book is about. You can also use a * to stand for multiple characters, so bo* will match 'book', 'books', or 'both.'">
+                  <apex:outputLabel id="helpText" styleClass="helpButton" for="searchBox" value="Words to search for" >
+                      <apex:outputPanel rendered="{!$Profile.Name='Seeker'}">
+                      <img src="/s.gif"  alt="Help" class="helpOrb" title="You can search for words in the book's title, the first or last name of the book's author, or even words describing what the book is about. You can also use a * to stand for multiple characters, so bo* will match 'book', 'books', or 'both.'"/>
+                      </apex:outputPanel>
+                      </apex:outputLabel>
+                  <apex:outputPanel >
+                    <apex:inputText id="searchBox" value="{!searchTerms}" />
+                    <apex:commandButton action="{!doSearch}" value="Search" />
+                  </apex:outputPanel>
+              </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection columns="1" id="goPageBlockSection" title="Or, find a book by ID number" >
+              <apex:pageBlockSectionItem >
+                    <apex:outputLabel id="helpText" styleClass="helpButton" for="copyNoBox"
+                                      value="ID number" >
+                        <img src="/s.gif"  alt="Help" class="helpOrb" title="Enter an ID number for a book and click Go to see the book's page and list of copies."/>
+                    </apex:outputLabel>
+                    <apex:outputPanel >
+                        <apex:inputText id="copyNoBox" value="{!copyNum}"  />
+                        <apex:commandButton action="{!goToBook}" value="Go" />
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection >
+          	<apex:commandButton action="{!URLFOR($Action.Book__c.new, null, null)}" value="New Book"
+                                  rendered="{!$ObjectType.Book__c.createable}" immediate="true" />
+          </apex:pageBlockSection>
+          <apex:pageBlockSection rendered="{!!ISNULL(books) && books.size=0}" title="No books found!" collapsible="false">
+              <apex:outputText value="No books were found matching your search terms. You might want to try making words singular ('stone' instead of 'stones') or adding a * to the end of words ('stone*')" />
+          </apex:pageBlockSection>
+          <apex:pageBlockTable value="{!books}" var="book" rendered="{!!ISNULL(books) && books.size > 0}" >
+              <apex:column rendered="{!$ObjectType.Book__c.updateable}">
+                  <apex:panelGrid columns="2">
+                      <apex:commandLink action="{!URLFOR($Action.Book__c.edit, book.id, null)}" value="Edit" />
+                      <apex:commandLink action="{!URLFOR($Action.Book__c.delete, book.id, null)}" value="Del"
+                                        onclick="return confirm('This will delete all copies of this book and all book information. Are you sure you want to do this?')"/>
+                  </apex:panelGrid>
+                  
+              </apex:column>
+              <apex:column headerValue="Title" >
+                  <apex:outputLink value="Book?id={!book.id}" >{!book.Title__c}</apex:outputLink>
+              </apex:column>
+              <apex:column value="{!book.Author_Display_Name__c}" />
+              <apex:column value="{!book.Copyright_Date__c}" />
+              <apex:column value="{!book.Location__r.Full_Location__c}"/>
+              <apex:column value="{!book.Dewey_Decimal_Code__c}" />
+              <apex:column value="{!book.Generally_Available_Copies__c}" />
+              <apex:column value="{!book.Newberry_Book__c}"/>
+          </apex:pageBlockTable>
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

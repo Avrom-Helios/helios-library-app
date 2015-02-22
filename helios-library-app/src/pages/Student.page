@@ -1,0 +1,18 @@
+<apex:page standardController="Contact" >
+
+      <apex:pageBlock title="Student Details">
+              
+          <apex:pageBlockButtons >
+              <apex:form >
+              <apex:commandButton action="{!edit}" value="Edit Student Information" />
+              <apex:commandButton action="{!delete}" value="Delete Student from Database" />
+          		</apex:form>
+              </apex:pageBlockButtons>
+          
+          <apex:pageBlockSection >
+              <apex:outputField value="{!Contact.Name}" />
+              <apex:outputField value="{!Contact.Email}" />
+          </apex:pageBlockSection>
+          <apex:relatedList list="Checkouts__r" rendered="{!$Profile.Name != 'Seeker'}"/>
+      </apex:pageBlock>
+</apex:page>

@@ -1,0 +1,16 @@
+<apex:page standardController="Waitlist_Entry__c" showHeader="{!$Profile.Name!='Seeker'}" extensions="WaitlistEntryExtension">
+  <apex:image rendered="{!$Profile.Name='Seeker'}" value="{!URLFOR($Resource.HeliosLogo)}"/>
+    <apex:pageMessages />
+    <apex:form >
+    <apex:pageBlock title="New Waitlist Entry for '{!theBook.Title__c}'" >
+       <apex:pageBlockButtons >
+           <apex:commandButton value="Save" action="{!save}" />
+           <apex:commandButton value="Cancel" action="{!cancel}" immediate="true" />
+       </apex:pageBlockButtons>
+       <apex:pageBlockSection >
+           <apex:outputField value="{!theBook.Author_Display_Name__c}" />
+           <apex:inputField value="{!Waitlist_Entry__c.Student__c}" />
+       </apex:pageBlockSection>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>
